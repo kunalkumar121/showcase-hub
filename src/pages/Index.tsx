@@ -1,16 +1,29 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useMemo } from "react";
+import HeroBanner from "@/components/HeroBanner";
+import MovieRow from "@/components/MovieRow";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const ROWS = [
+  { title: "Trending Now", params: { sort: "numVotes.desc", limit: 20 } },
+  { title: "Top Rated", params: { sort: "averageRating.desc", limit: 20 } },
+  { title: "Action Movies", params: { genre: "Action", titleType: "movie", limit: 20 } },
+  { title: "Comedy", params: { genre: "Comedy", titleType: "movie", limit: 20 } },
+  { title: "Drama Series", params: { genre: "Drama", titleType: "tvSeries", limit: 20 } },
+  { title: "Sci-Fi", params: { genre: "Sci-Fi", limit: 20 } },
+  { title: "Thriller", params: { genre: "Thriller", titleType: "movie", limit: 20 } },
+  { title: "Horror", params: { genre: "Horror", limit: 20 } },
+];
+
+export default function Index() {
+  const rows = useMemo(() => ROWS, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen bg-background">
+      <HeroBanner />
+      <div className="-mt-24 relative z-10 pb-16">
+        {rows.map(row => (
+          <MovieRow key={row.title} title={row.title} params={row.params} />
+        ))}
+      </div>
     </div>
   );
-};
-
-const Index = PlaceholderIndex;
-
-export default Index;
+}
