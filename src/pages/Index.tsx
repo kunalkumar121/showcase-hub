@@ -3,14 +3,14 @@ import HeroBanner from "@/components/HeroBanner";
 import MovieRow from "@/components/MovieRow";
 
 const ROWS = [
-  { title: "Trending Now", params: { sort: "numVotes.desc", limit: 20 } },
-  { title: "Top Rated", params: { sort: "averageRating.desc", limit: 20 } },
-  { title: "Action Movies", params: { genre: "Action", titleType: "movie", limit: 20 } },
-  { title: "Comedy", params: { genre: "Comedy", titleType: "movie", limit: 20 } },
-  { title: "Drama Series", params: { genre: "Drama", titleType: "tvSeries", limit: 20 } },
-  { title: "Sci-Fi", params: { genre: "Sci-Fi", limit: 20 } },
-  { title: "Thriller", params: { genre: "Thriller", titleType: "movie", limit: 20 } },
-  { title: "Horror", params: { genre: "Horror", limit: 20 } },
+  { title: "Trending Now", params: { sortBy: "SORT_BY_POPULARITY", minVoteCount: 50000 } },
+  { title: "Top Rated", params: { sortBy: "SORT_BY_USER_RATING", minVoteCount: 100000 } },
+  { title: "Action Movies", params: { genres: "Action", types: "MOVIE", minVoteCount: 10000 } },
+  { title: "Comedy", params: { genres: "Comedy", types: "MOVIE", minVoteCount: 10000 } },
+  { title: "Drama Series", params: { genres: "Drama", types: "TV_SERIES", minVoteCount: 10000 } },
+  { title: "Sci-Fi", params: { genres: "Sci-Fi", minVoteCount: 10000 } },
+  { title: "Thriller", params: { genres: "Thriller", types: "MOVIE", minVoteCount: 10000 } },
+  { title: "Horror", params: { genres: "Horror", minVoteCount: 5000 } },
 ];
 
 export default function Index() {

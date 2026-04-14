@@ -15,9 +15,9 @@ export default function HeroBanner() {
     let cancelled = false;
     (async () => {
       try {
-        const data = await listTitles({ sort: "numVotes.desc", limit: 10 });
-        if (!cancelled && data.results?.length) {
-          const withImage = data.results.filter(r => r.primaryImage);
+        const data = await listTitles({ sortBy: "SORT_BY_POPULARITY", minVoteCount: 100000 });
+        if (!cancelled && data.titles?.length) {
+          const withImage = data.titles.filter(r => r.primaryImage?.url);
           setFeatured(withImage[Math.floor(Math.random() * Math.min(5, withImage.length))]);
         }
       } catch (e) { console.error(e); }
@@ -29,14 +29,13 @@ export default function HeroBanner() {
   if (loading) return <SkeletonBanner />;
   if (!featured) return null;
 
+  const imageUrl = featured.primaryImage?.url;
+  const rating = featured.rating?.aggregateRating;
+
   return (
     <div className="relative h-[70vh] md:h-[85vh] w-full overflow-hidden">
-      {featured.primaryImage && (
-        <img
-          src={featured.primaryImage}
-          alt={featured.primaryTitle}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
+      {imageUrl && (
+        <img src={imageUrl} alt={featured.primaryTitle} className="absolute inset-0 w-full h-full object-cover" />
       )}
       <div className="absolute inset-0 netflix-gradient-banner" />
       <div className="absolute inset-0 netflix-gradient-bottom" />
@@ -46,12 +45,12 @@ export default function HeroBanner() {
           {featured.primaryTitle}
         </h1>
         <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
-          {featured.averageRating && <span className="text-primary font-semibold">★ {featured.averageRating}</span>}
+          {rating && <span className="text-primary font-semibold">★ {rating}</span>}
           {featured.startYear && <span>{featured.startYear}</span>}
           {featured.genres?.slice(0, 3).map(g => <span key={g} className="bg-secondary/60 px-2 py-0.5 rounded text-xs">{g}</span>)}
         </div>
-        {featured.description && (
-          <p className="text-sm text-secondary-foreground/80 line-clamp-3 mb-5">{featured.description}</p>
+        {featured.plot && (
+          <p className="text-sm text-secondary-foreground/80 line-clamp-3 mb-5">{featured.plot}</p>
         )}
         <div className="flex gap-3">
           <button

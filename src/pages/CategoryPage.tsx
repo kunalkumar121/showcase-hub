@@ -11,47 +11,46 @@ interface Props {
 
 export default function CategoryPage({ titleType, pageTitle, genres }: Props) {
   const [titles, setTitles] = useState<Title[]>([]);
-  const [page, setPage] = useState(1);
+  const [nextToken, setNextToken] = useState<string | undefined>();
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [selectedGenre, setSelectedGenre] = useState("");
   const loaderRef = useRef<HTMLDivElement>(null);
 
-  const fetchTitles = useCallback(async (p: number, genre: string, append: boolean) => {
+  const fetchTitles = useCallback(async (token: string | undefined, genre: string, append: boolean) => {
     setLoading(true);
     try {
       const data = await listTitles({
-        titleType,
-        genre: genre || undefined,
-        sort: "numVotes.desc",
-        page: p,
-        limit: 30,
+        types: titleType,
+        genres: genre || undefined,
+        sortBy: "SORT_BY_POPULARITY",
+        pageToken: token,
+        minVoteCount: 1000,
       });
-      const results = data.results || [];
+      const results = data.titles || [];
       setTitles(prev => append ? [...prev, ...results] : results);
-      setHasMore(!!data.hasNextPage);
+      setNextToken(data.nextPageToken);
+      setHasMore(!!data.nextPageToken);
     } catch (e) { console.error(e); }
     setLoading(false);
   }, [titleType]);
 
   useEffect(() => {
-    setPage(1);
-    fetchTitles(1, selectedGenre, false);
+    setNextToken(undefined);
+    fetchTitles(undefined, selectedGenre, false);
   }, [selectedGenre, fetchTitles]);
 
   useEffect(() => {
     const el = loaderRef.current;
     if (!el || !hasMore) return;
     const obs = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !loading) {
-        const next = page + 1;
-        setPage(next);
-        fetchTitles(next, selectedGenre, true);
+      if (entry.isIntersecting && !loading && nextToken) {
+        fetchTitles(nextToken, selectedGenre, true);
       }
     }, { rootMargin: "400px" });
     obs.observe(el);
     return () => obs.disconnect();
-  }, [page, loading, hasMore, selectedGenre, fetchTitles]);
+  }, [loading, hasMore, nextToken, selectedGenre, fetchTitles]);
 
   return (
     <div className="min-h-screen bg-background pt-20 pb-16">

@@ -16,7 +16,7 @@ export default function SearchPage() {
     (async () => {
       try {
         const data = await searchTitles(query);
-        if (!cancelled) setResults(data.results || []);
+        if (!cancelled) setResults(data.titles || []);
       } catch (e) { console.error(e); }
       if (!cancelled) setLoading(false);
     })();

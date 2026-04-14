@@ -19,7 +19,7 @@ export default function SearchBar({ onClose }: { onClose?: () => void }) {
     setLoading(true);
     try {
       const data = await searchTitles(q);
-      setSuggestions((data.results || []).slice(0, 8));
+      setSuggestions((data.titles || []).slice(0, 8));
     } catch { setSuggestions([]); }
     setLoading(false);
   }, []);
@@ -65,12 +65,12 @@ export default function SearchBar({ onClose }: { onClose?: () => void }) {
               onClick={() => handleSelect(s)}
               className="w-full flex items-center gap-3 px-3 py-2 hover:bg-accent transition-colors text-left"
             >
-              {s.primaryImage && (
-                <img src={s.primaryImage} alt="" className="w-8 h-12 object-cover rounded" loading="lazy" />
+              {s.primaryImage?.url && (
+                <img src={s.primaryImage.url} alt="" className="w-8 h-12 object-cover rounded" loading="lazy" />
               )}
               <div>
                 <div className="text-sm font-medium text-foreground">{s.primaryTitle}</div>
-                <div className="text-xs text-muted-foreground">{s.startYear} · {s.titleType}</div>
+                <div className="text-xs text-muted-foreground">{s.startYear} · {s.type}</div>
               </div>
             </button>
           ))}
