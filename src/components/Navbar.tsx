@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search, User, X } from "lucide-react";
+import nflixLogo from "@/assets/nflix-logo.png";
 import { useApp } from "@/context/AppContext";
 import SearchBar from "./SearchBar";
 
