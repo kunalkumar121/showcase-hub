@@ -16,6 +16,8 @@ export default function MovieCard({ title, index = 0 }: Props) {
   const { addToWatchlist, removeFromWatchlist, isInWatchlist, addToHistory } = useApp();
   const navigate = useNavigate();
   const inList = isInWatchlist(title.id);
+  const imageUrl = title.primaryImage?.url;
+  const rating = title.rating?.aggregateRating;
 
   useEffect(() => {
     const el = ref.current;
@@ -47,9 +49,9 @@ export default function MovieCard({ title, index = 0 }: Props) {
       className="flex-shrink-0 w-[140px] md:w-[180px] cursor-pointer group"
     >
       <div className="relative aspect-[2/3] rounded-md overflow-hidden bg-secondary">
-        {visible && title.primaryImage ? (
+        {visible && imageUrl ? (
           <img
-            src={title.primaryImage}
+            src={imageUrl}
             alt={title.primaryTitle}
             loading="lazy"
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -72,7 +74,7 @@ export default function MovieCard({ title, index = 0 }: Props) {
       <div className="mt-2 px-0.5">
         <p className="text-xs font-medium text-foreground truncate">{title.primaryTitle}</p>
         <p className="text-[10px] text-muted-foreground">
-          {title.startYear}{title.averageRating ? ` · ★${title.averageRating}` : ""}
+          {title.startYear}{rating ? ` · ★${rating}` : ""}
         </p>
       </div>
     </motion.div>

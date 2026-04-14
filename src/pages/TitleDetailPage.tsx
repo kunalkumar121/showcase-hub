@@ -46,11 +46,16 @@ export default function TitleDetailPage() {
     );
   }
 
+  const imageUrl = title.primaryImage?.url;
+  const rating = title.rating?.aggregateRating;
+  const votes = title.rating?.voteCount;
+  const runtimeMin = title.runtimeSeconds ? Math.round(title.runtimeSeconds / 60) : null;
+
   return (
     <div className="min-h-screen bg-background">
       <div className="relative h-[50vh] md:h-[70vh]">
-        {title.primaryImage && (
-          <img src={title.primaryImage} alt={title.primaryTitle} className="absolute inset-0 w-full h-full object-cover" />
+        {imageUrl && (
+          <img src={imageUrl} alt={title.primaryTitle} className="absolute inset-0 w-full h-full object-cover" />
         )}
         <div className="absolute inset-0 netflix-gradient-banner" />
         <div className="absolute inset-0 netflix-gradient-bottom" />
@@ -67,14 +72,14 @@ export default function TitleDetailPage() {
         <h1 className="text-3xl md:text-4xl font-extrabold text-foreground mb-2">{title.primaryTitle}</h1>
 
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground mb-4">
-          {title.averageRating && (
+          {rating && (
             <span className="flex items-center gap-1 text-primary font-semibold">
-              <Star size={14} fill="currentColor" /> {title.averageRating}
+              <Star size={14} fill="currentColor" /> {rating}
             </span>
           )}
-          {title.numVotes && <span>{title.numVotes.toLocaleString()} votes</span>}
+          {votes && <span>{votes.toLocaleString()} votes</span>}
           {title.startYear && <span>{title.startYear}{title.endYear ? `-${title.endYear}` : ""}</span>}
-          {title.runtimeMinutes && <span>{title.runtimeMinutes} min</span>}
+          {runtimeMin && <span>{runtimeMin} min</span>}
           {title.contentRating && <span className="border border-border px-1.5 py-0.5 rounded text-xs">{title.contentRating}</span>}
         </div>
 
@@ -86,8 +91,8 @@ export default function TitleDetailPage() {
           </div>
         )}
 
-        {title.description && (
-          <p className="text-secondary-foreground/80 text-sm leading-relaxed mb-6">{title.description}</p>
+        {title.plot && (
+          <p className="text-secondary-foreground/80 text-sm leading-relaxed mb-6">{title.plot}</p>
         )}
 
         <div className="flex gap-3">

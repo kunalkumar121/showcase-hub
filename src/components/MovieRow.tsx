@@ -7,11 +7,12 @@ import SkeletonRow from "./SkeletonRow";
 interface Props {
   title: string;
   params: {
-    titleType?: string;
-    genre?: string;
+    types?: string;
+    genres?: string;
+    sortBy?: string;
+    sortOrder?: string;
     startYear?: number;
-    sort?: string;
-    limit?: number;
+    minVoteCount?: number;
   };
   staticTitles?: Title[];
 }
@@ -26,8 +27,8 @@ export default function MovieRow({ title, params, staticTitles }: Props) {
     let cancelled = false;
     (async () => {
       try {
-        const data = await listTitles({ limit: 20, ...params });
-        if (!cancelled) setTitles(data.results || []);
+        const data = await listTitles(params);
+        if (!cancelled) setTitles(data.titles || []);
       } catch (e) { console.error(e); }
       if (!cancelled) setLoading(false);
     })();
